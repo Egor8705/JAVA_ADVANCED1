@@ -1,101 +1,104 @@
 package org.example;
 
-import java.util.Scanner;
+import java.util.Arrays;
 
 /**
  * Main class
+ *
  * @author ELano
- * @see #calculate()
- * @see #findMax()
+ * @see #findMaxMin()
+ * @see #sweetsPresent()
  */
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter number of task: (1 - calculator, 2 - string array)");
-        int task = scanner.nextInt();
-
-        switch (task){
-            case 1: {
-                calculate();
-                break;
-            }
-            case 2: {
-                findMax();
-                break;
-            }
-
-            default:break;
-        }
+        findMaxMin();
+        sweetsPresent();
     }
 
     /**
-     * Calculate function, input 2 numbers and operation
-     * */
-    public static void calculate() {
-        Scanner scanner = new Scanner(System.in);
+     * Find max negative and min positive elements in random array and replace them
+     */
+    public static void findMaxMin() {
+        System.out.print("Find max and min\n");
 
-        System.out.println("Enter first element: ");
-        float param1 = scanner.nextFloat();
+        int AMOUNT = 20;
+        int MAX = 10;
+        int MIN = -10;
 
-        System.out.println("Enter first element: ");
-        float param2 = scanner.nextFloat();
+        int[] arr = new int[AMOUNT];
 
-        System.out.println("Operation: ");
-        String operation = scanner.next();
-
-        float result;
-        switch (operation) {
-            case "+": {
-                result = param1 + param2;
-                break;
-            }
-            case "-": {
-                result = param1 - param2;
-                break;
-            }
-            case "*": {
-                result = param1 * param2;
-                break;
-            }
-            case "/": {
-                result = param1 / param2;
-                break;
-            }
-            default: {
-                System.err.println("Incorrect operation");
-                return;
-            }
+        for (int i = 0; i < AMOUNT; i++) {
+            arr[i] = (int) Math.floor(Math.random() * (MAX - MIN + 1) + MIN);
         }
 
-        System.out.printf("Result: %.4f", result);
+        System.out.println(Arrays.toString(arr));
+
+        int negIndex = -1;
+        int posIndex = -1;
+
+        int i = 0;
+        while (i < AMOUNT) {
+            if (arr[i] > 0 && (posIndex == -1 || arr[i] < arr[posIndex])) {
+                posIndex = i;
+            } else if (arr[i] < 0 && (negIndex == -1 || arr[i] > arr[negIndex])) {
+                negIndex = i;
+            }
+
+            i++;
+        }
+
+        if (negIndex != -1 && posIndex != -1) {
+            int replace = arr[negIndex];
+            arr[negIndex] = arr[posIndex];
+            arr[posIndex] = replace;
+
+            System.out.println(Arrays.toString(arr));
+        } else {
+            System.err.println("Incorrect random");
+        }
+    }
+
+    public static float getRandomValue(int max, int min) {
+        return (float) (Math.floor((Math.random() * (max - min + 1) + min) * 100) / 100);
+    }
+
+    public static int getRandomValue() {
+        return Sweets.generateId();
     }
 
     /**
-     * Find element with max length
-     * */
-    public static void findMax() {
-        Scanner scanner = new Scanner(System.in);
+    * Create sweets array, calculate total weight and price
+    * */
+    public static void sweetsPresent() {
+        System.out.print("\nSweets present\n");
 
-        System.out.println("Enter amount of elements: ");
-        int amount = scanner.nextInt();
+        int MIN_WEIGHT = 1;
+        int MAX_WEIGHT = 10;
 
-        System.out.println("Enter elements: ");
+        int MIN_PRICE = 10;
+        int MAX_PRICE = 1000;
 
-        String[] arr = new String[amount];
+        Sweets candy = new Sweets("Candy", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE));
+        Sweets cake = new Sweets("Cake", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
+        Sweets gumdrops = new Sweets("Gumdrops", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
+        Sweets jellybean = new Sweets("Jellybean", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE));
+        Sweets marmalade = new Sweets("Marmalade", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
 
-        for (int i = 0; i < amount; i++){
-            String str = scanner.next();
-            arr[i] = str;
+        Sweets[] sweets = new Sweets[]{candy, cake, gumdrops, jellybean, marmalade};
+
+        float totalWeight = 0;
+        float totalPrice = 0;
+
+        for (Sweets sweetness : sweets) {
+            totalWeight += sweetness.getWeight();
+            totalPrice += sweetness.getPrice();
         }
 
-        String maxLenElem = "";
-        for (String str: arr){
-            if(str.length() > maxLenElem.length()){
-                maxLenElem = str;
-            }
+        System.out.printf("Total weight: %.2f, Total price: %.2f\n", totalWeight, totalPrice);
+
+        for (Sweets sweetness : sweets) {
+            System.out.printf(sweetness.toString() + "\n");
         }
-        System.out.println(maxLenElem);
     }
 }
