@@ -1,5 +1,7 @@
 package org.example;
 
+import sweets.*;
+
 import java.util.Arrays;
 
 /**
@@ -63,10 +65,6 @@ public class Main {
         return (float) (Math.floor((Math.random() * (max - min + 1) + min) * 100) / 100);
     }
 
-    public static int getRandomValue() {
-        return Sweets.generateId();
-    }
-
     /**
     * Create sweets array, calculate total weight and price
     * */
@@ -79,13 +77,15 @@ public class Main {
         int MIN_PRICE = 10;
         int MAX_PRICE = 1000;
 
-        Sweets candy = new Sweets("Candy", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE));
-        Sweets cake = new Sweets("Cake", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
-        Sweets gumdrops = new Sweets("Gumdrops", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
-        Sweets jellybean = new Sweets("Jellybean", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE));
-        Sweets marmalade = new Sweets("Marmalade", getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), getRandomValue());
+        Candy candy1 = new Candy(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), "France");
+        Candy candy2 = new Candy(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), "Italy");
+        Cake cake = new Cake(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), 1500.12F);
+        Gumdrops gumdrops = new Gumdrops(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), 101);
+        Jellybean jellybean = new Jellybean(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), "circle");
+        Marmalade marmalade1 = new Marmalade(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), "red");
+        Marmalade marmalade2 = new Marmalade(getRandomValue(MAX_WEIGHT, MIN_WEIGHT), getRandomValue(MAX_PRICE, MIN_PRICE), "green");
 
-        Sweets[] sweets = new Sweets[]{candy, cake, gumdrops, jellybean, marmalade};
+        Sweets[] sweets = new Sweets[]{candy1, candy2, cake, gumdrops, jellybean, marmalade1, marmalade2};
 
         float totalWeight = 0;
         float totalPrice = 0;
