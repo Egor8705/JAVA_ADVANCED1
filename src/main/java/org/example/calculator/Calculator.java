@@ -1,14 +1,14 @@
 package org.example.calculator;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
  * Calculator class
  *
  * @author ELano
- * @see #inputParam()
  * @see #inputParam(boolean secondParam)
- * @see #inputParam(String operation)
+ * @see #inputOperation()
  * @see #start()
  * @see #end()
  * @see #run()
@@ -16,60 +16,93 @@ import java.util.Scanner;
 public class Calculator {
     private static Scanner scanner;
 
-    private static float inputParam() {
-        System.out.println("Enter first element: ");
-        return scanner.nextFloat();
-    }
-
     private static float inputParam(boolean secondParam) {
-        System.out.println("Enter second element: ");
-        return scanner.nextFloat();
-    }
 
-    private static String inputParam(String operation) {
-        System.out.println("Operation: ");
-        return scanner.next();
-    }
+        float value = 0;
+        boolean inputErr = true;
 
-    private static void printResult(float param1, float param2, String operation) {
-        float result;
-
-        switch (operation) {
-            case "+": {
-                result = param1 + param2;
-                break;
-            }
-            case "-": {
-                result = param1 - param2;
-                break;
-            }
-            case "*": {
-                result = param1 * param2;
-                break;
-            }
-            case "/": {
-                result = param1 / param2;
-                break;
-            }
-            default: {
-                System.err.println("Incorrect operation");
-                System.out.println("Please, input operation again (+, -, *, /)");
-
-                String newOperation = inputParam("");
-
-                printResult(param1, param2, newOperation);
-                return;
+        while (inputErr) {
+            try {
+                System.out.println(!secondParam ? "Enter first element: " : "Enter second element: ");
+                value = scanner.nextFloat();
+                inputErr = false;
+            } catch (InputMismatchException err) {
+                System.err.println("Exception thrown: " + err);
+                scanner.next();
             }
         }
 
-        System.out.printf("Result: %.4f\n", result);
+        return value;
+    }
+
+    private static String inputOperation() {
+        String operation = "";
+        boolean inputErr = true;
+
+        while (inputErr) {
+            try {
+                System.out.println("Operation: ");
+                operation = scanner.next();
+
+                if (operation.length() > 1 || !operation.matches("[-+/*]")) {
+                    throw new OperationException();
+                }
+                inputErr = false;
+            } catch (OperationException err) {
+                err.printStackTrace();
+            }
+        }
+
+        return operation;
+    }
+
+    private static <err> void printResult(float param1, float param2, String operation) {
+        float result;
+
+        try {
+            switch (operation) {
+                case "+": {
+                    result = param1 + param2;
+                    break;
+                }
+                case "-": {
+                    result = param1 - param2;
+                    break;
+                }
+                case "*": {
+                    result = param1 * param2;
+                    break;
+                }
+                case "/": {
+                    if (param2 == 0) {
+                        throw new ArithmeticException();
+                    }
+
+                    result = param1 / param2;
+                    break;
+                }
+                default: {
+                    String newOperation = inputOperation();
+
+                    printResult(param1, param2, newOperation);
+                    return;
+                }
+            }
+
+            System.out.printf("Result: %.4f\n", result);
+        } catch (ArithmeticException err) {
+            System.err.println("Exception thrown: " + err);
+
+            float newParam2 = inputParam(true);
+            printResult(param1, newParam2, operation);
+        }
     }
 
     static private void calculate() {
-        float param1 = inputParam();
+        float param1 = inputParam(false);
         float param2 = inputParam(true);
 
-        String operation = inputParam("");
+        String operation = inputOperation();
 
         printResult(param1, param2, operation);
     }
