@@ -11,7 +11,7 @@ public class Calculator {
 
     private float secondParam = Float.NaN;
 
-    private String operation;
+    private String operation = "";
 
     public Calculator() {
     }
@@ -51,7 +51,7 @@ public class Calculator {
             System.out.println("Please, set correct first arg");
 
             return Float.NaN;
-        } else if (Float.isNaN(this.secondParam)) {
+        } else if (Float.isNaN(secondParam)) {
             System.out.println("Please, set correct second arg");
 
             return Float.NaN;
