@@ -1,75 +1,85 @@
 import org.example.calculator.Calculator;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 
 public class CalculatorTests {
 
-    static private String result = "Result: ";
-    static private InputStream stdin;
-    static private PrintStream stdout;
+    @Test
+    public void checkSetters() {
+        Calculator calculator = new Calculator();
 
-    static private ByteArrayInputStream getInputTestStream(String inputString) {
-        return new ByteArrayInputStream(inputString.getBytes());
-    }
+        calculator.setFirstParam(1);
+        calculator.setSecondParam(2);
+        calculator.setOperation("*");
 
-    private static String getOutputValue(String inputString) {
-        System.setIn(getInputTestStream(inputString));
+        float result = calculator.calculate();
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(byteArrayOutputStream);
-        System.setOut(ps);
-
-        Calculator.run();
-
-        System.setIn(stdin);
-        System.setOut(stdout);
-
-        String outputText = byteArrayOutputStream.toString();
-        return outputText.substring(outputText.indexOf(result) + result.length()).trim();
-    }
-
-    @Before
-    public void init() {
-        stdin = System.in;
-        stdout = System.out;
+        Assert.assertEquals(2f, result, 0.0f);
     }
 
     @Test
-    public void checkCorrectInputParamsAndOperators() {
-        String output1 = getOutputValue("3\n4\n+");
-        String output2 = getOutputValue("3\n4\n*");
-        String output3 = getOutputValue("12\n4\n/");
-        String output4 = getOutputValue("3\n4\n-");
+    public void checkWithoutSetSecondParam() {
+        Calculator calculator = new Calculator();
 
-        Assert.assertEquals(output1, "7,0000");
-        Assert.assertEquals(output2, "12,0000");
-        Assert.assertEquals(output3, "3,0000");
-        Assert.assertEquals(output4, "-1,0000");
+        calculator.setFirstParam(1);
+        calculator.setOperation("*");
+
+        float result = calculator.calculate();
+
+        Assert.assertTrue(Float.isNaN(result));
     }
 
     @Test
-    public void checkDivisionByZeroAndRetryInputSecondParam() {
-        String output1 = getOutputValue("4\n0\n/\n2");
-        String output2 = getOutputValue("4\n0\n/\n0\n4");
+    public void checkWithoutOperation() {
+        Calculator calculator = new Calculator();
 
-        Assert.assertEquals(output1, "2,0000");
-        Assert.assertEquals(output2, "1,0000");
+        calculator.setFirstParam(1);
+        calculator.setSecondParam(2);
+
+        float result = calculator.calculate();
+
+        System.out.println(result);
+
+        Assert.assertTrue(Float.isNaN(result));
     }
 
     @Test
-    public void checkIncorrectOperatorAndRetryInputOperator() {
-        String output1 = getOutputValue("3\n4\nsome_incorrect_operator\n+");
-        String output2 = getOutputValue("3\n4\n*-r\n*");
-        String output3 = getOutputValue("3\n4\n0\n/");
+    public void checkSetInConstructor() {
+        Calculator calculator = new Calculator(10, 20, "-");
 
-        Assert.assertEquals(output1, "7,0000");
-        Assert.assertEquals(output2, "12,0000");
-        Assert.assertEquals(output3, "0,7500");
+        float result = calculator.calculate();
+
+        Assert.assertEquals(-10f, result, 0.0f);
+    }
+
+    @Test
+    public void checkCalculateMethod() {
+        Calculator calculator = new Calculator();
+
+        float result = calculator.calculate(10, 20, "-");
+
+        Assert.assertEquals(-10f, result, 0.0f);
+    }
+
+    @Test
+    public void checkGetters() {
+        Calculator calculator = new Calculator();
+
+        calculator.setFirstParam(1);
+        calculator.setSecondParam(2);
+        calculator.setOperation("+");
+
+        Assert.assertEquals(1f, calculator.getFirstParam(), 0.0f);
+        Assert.assertEquals(2f, calculator.getSecondParam(), 0.0f);
+        Assert.assertEquals("+", calculator.getOperation());
+
+        calculator.setFirstParam(10);
+        Assert.assertEquals(10f, calculator.getFirstParam(), 0.0f);
+
+        calculator.setSecondParam(20);
+        Assert.assertEquals(20f, calculator.getSecondParam(), 0.0f);
+
+        calculator.setOperation("/");
+        Assert.assertEquals("/", calculator.getOperation());
     }
 }
