@@ -1,123 +1,107 @@
 package org.example.calculator;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 /**
  * Calculator class
  *
  * @author ELano
- * @see #inputParam(boolean secondParam)
- * @see #inputOperation()
- * @see #start()
- * @see #end()
- * @see #run()
  */
 public class Calculator {
-    private static Scanner scanner;
 
-    private static float inputParam(boolean secondParam) {
+    private float firstParam = Float.NaN;
 
-        float value = 0;
-        boolean inputErr = true;
+    private float secondParam = Float.NaN;
 
-        while (inputErr) {
-            try {
-                System.out.println(!secondParam ? "Enter first element: " : "Enter second element: ");
-                value = scanner.nextFloat();
-                inputErr = false;
-            } catch (InputMismatchException err) {
-                System.err.println("Exception thrown: " + err);
-                scanner.next();
-            }
-        }
+    private String operation;
 
-        return value;
+    public Calculator() {
     }
 
-    private static String inputOperation() {
-        String operation = "";
-        boolean inputErr = true;
-
-        while (inputErr) {
-            try {
-                System.out.println("Operation: ");
-                operation = scanner.next();
-
-                if (operation.length() > 1 || !operation.matches("[-+/*]")) {
-                    throw new OperationException();
-                }
-                inputErr = false;
-            } catch (OperationException err) {
-                err.printStackTrace();
-            }
-        }
-
-        return operation;
+    public Calculator(float firstParam, float secondParam, String operation) {
+        this.firstParam = firstParam;
+        this.secondParam = secondParam;
+        this.operation = operation;
     }
 
-    private static <err> void printResult(float param1, float param2, String operation) {
+    public void setFirstParam(float param) {
+        this.firstParam = param;
+    }
+
+    public float getFirstParam() {
+        return this.firstParam;
+    }
+
+    public void setSecondParam(float param) {
+        this.secondParam = param;
+    }
+
+    public float getSecondParam() {
+        return this.secondParam;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getOperation() {
+        return this.operation;
+    }
+
+    public float calculate(float firstParam, float secondParam, String operation) {
+        if(Float.isNaN(firstParam)){
+            System.out.println("Please, set correct first arg");
+
+            return Float.NaN;
+        } else if (Float.isNaN(this.secondParam)) {
+            System.out.println("Please, set correct second arg");
+
+            return Float.NaN;
+        }
+
         float result;
 
-        try {
-            switch (operation) {
-                case "+": {
-                    result = param1 + param2;
-                    break;
-                }
-                case "-": {
-                    result = param1 - param2;
-                    break;
-                }
-                case "*": {
-                    result = param1 * param2;
-                    break;
-                }
-                case "/": {
-                    if (param2 == 0) {
-                        throw new ArithmeticException();
-                    }
-
-                    result = param1 / param2;
-                    break;
-                }
-                default: {
-                    String newOperation = inputOperation();
-
-                    printResult(param1, param2, newOperation);
-                    return;
-                }
+        switch (operation) {
+            case "+": {
+                result = firstParam + secondParam;
+                break;
             }
+            case "-": {
+                result = firstParam - secondParam;
+                break;
+            }
+            case "*": {
+                result = firstParam * secondParam;
+                break;
+            }
+            case "/": {
+                if (secondParam == 0) {
+                    return Float.NaN;
+                }
 
-            System.out.printf("Result: %.4f\n", result);
-        } catch (ArithmeticException err) {
-            System.err.println("Exception thrown: " + err);
+                result = firstParam / secondParam;
+                break;
+            }
+            default: {
+                System.err.println("Incorrect operation");
+                System.out.println("Please, set correct operation (+, -, *, /)");
 
-            float newParam2 = inputParam(true);
-            printResult(param1, newParam2, operation);
+                return Float.NaN;
+            }
         }
+
+        return result;
     }
 
-    static private void calculate() {
-        float param1 = inputParam(false);
-        float param2 = inputParam(true);
+    public float calculate() {
+        if(Float.isNaN(this.firstParam)){
+            System.out.println("Please, set first param");
 
-        String operation = inputOperation();
+            return Float.NaN;
+        } else if (Float.isNaN(this.secondParam)) {
+            System.out.println("Please, set second param");
 
-        printResult(param1, param2, operation);
-    }
+            return Float.NaN;
+        }
 
-    static private void start() {
-        scanner = new Scanner(System.in);
-    }
-
-    static private void end() {
-        scanner.close();
-    }
-
-    public static void run() {
-        start();
-        calculate();
-        end();
+        return this.calculate(this.firstParam, this.secondParam, this.operation);
     }
 }
