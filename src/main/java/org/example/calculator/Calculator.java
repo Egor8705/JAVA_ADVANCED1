@@ -2,7 +2,6 @@ package org.example.calculator;
 
 /**
  * Calculator class
- *
  * @author ELano
  */
 public class Calculator {
@@ -47,7 +46,7 @@ public class Calculator {
     }
 
     public float calculate(float firstParam, float secondParam, String operation) {
-        if(Float.isNaN(firstParam)){
+        if (Float.isNaN(firstParam)) {
             System.out.println("Please, set correct first arg");
 
             return Float.NaN;
@@ -59,40 +58,47 @@ public class Calculator {
 
         float result;
 
-        switch (operation) {
-            case "+": {
-                result = firstParam + secondParam;
-                break;
-            }
-            case "-": {
-                result = firstParam - secondParam;
-                break;
-            }
-            case "*": {
-                result = firstParam * secondParam;
-                break;
-            }
-            case "/": {
-                if (secondParam == 0) {
+        try {
+            switch (operation) {
+                case "+": {
+                    result = firstParam + secondParam;
+                    break;
+                }
+                case "-": {
+                    result = firstParam - secondParam;
+                    break;
+                }
+                case "*": {
+                    result = firstParam * secondParam;
+                    break;
+                }
+                case "/": {
+                    if (secondParam == 0) {
+                        throw new ArithmeticException();
+                    }
+
+                    result = firstParam / secondParam;
+                    break;
+                }
+                default: {
+                    System.err.println("Incorrect operation");
+                    System.out.println("Please, set correct operation (+, -, *, /)");
+
                     return Float.NaN;
                 }
-
-                result = firstParam / secondParam;
-                break;
             }
-            default: {
-                System.err.println("Incorrect operation");
-                System.out.println("Please, set correct operation (+, -, *, /)");
+        } catch (ArithmeticException err) {
+            System.err.println("Exception thrown: " + err);
+            err.printStackTrace();
 
-                return Float.NaN;
-            }
+            return Float.NaN;
         }
 
         return result;
     }
 
     public float calculate() {
-        if(Float.isNaN(this.firstParam)){
+        if (Float.isNaN(this.firstParam)) {
             System.out.println("Please, set first param");
 
             return Float.NaN;
