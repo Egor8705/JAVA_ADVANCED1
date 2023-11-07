@@ -7,9 +7,9 @@ package org.example.calculator;
  */
 public class Calculator {
 
-    private float firstParam;
+    private float firstParam = Float.NaN;
 
-    private float secondParam;
+    private float secondParam = Float.NaN;
 
     private String operation;
 
@@ -46,42 +46,17 @@ public class Calculator {
         return this.operation;
     }
 
-    public float calculate() {
-        float result;
+    public float calculate(float firstParam, float secondParam, String operation) {
+        if(Float.isNaN(firstParam)){
+            System.out.println("Please, set correct first arg");
 
-        switch (operation) {
-            case "+": {
-                result = this.firstParam + this.secondParam;
-                break;
-            }
-            case "-": {
-                result = this.firstParam - this.secondParam;
-                break;
-            }
-            case "*": {
-                result = this.firstParam * this.secondParam;
-                break;
-            }
-            case "/": {
-                if (this.secondParam == 0) {
-                    return Float.NaN;
-                }
+            return Float.NaN;
+        } else if (Float.isNaN(this.secondParam)) {
+            System.out.println("Please, set correct second arg");
 
-                result = this.firstParam / this.secondParam;
-                break;
-            }
-            default: {
-                System.err.println("Incorrect operation");
-                System.out.println("Please, set correct operation (+, -, *, /)");
-
-                return Float.NaN;
-            }
+            return Float.NaN;
         }
 
-        return result;
-    }
-
-    public float calculate(float firstParam, float secondParam, String operation) {
         float result;
 
         switch (operation) {
@@ -114,5 +89,19 @@ public class Calculator {
         }
 
         return result;
+    }
+
+    public float calculate() {
+        if(Float.isNaN(this.firstParam)){
+            System.out.println("Please, set first param");
+
+            return Float.NaN;
+        } else if (Float.isNaN(this.secondParam)) {
+            System.out.println("Please, set second param");
+
+            return Float.NaN;
+        }
+
+        return this.calculate(this.firstParam, this.secondParam, this.operation);
     }
 }
