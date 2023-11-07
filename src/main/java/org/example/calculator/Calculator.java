@@ -1,90 +1,118 @@
 package org.example.calculator;
 
-import java.util.Scanner;
-
 /**
  * Calculator class
  *
  * @author ELano
- * @see #inputParam()
- * @see #inputParam(boolean secondParam)
- * @see #inputParam(String operation)
- * @see #start()
- * @see #end()
- * @see #run()
  */
 public class Calculator {
-    private static Scanner scanner;
 
-    private static float inputParam() {
-        System.out.println("Enter first element: ");
-        return scanner.nextFloat();
+    private float firstParam;
+
+    private float secondParam;
+
+    private String operation;
+
+    public Calculator() {
     }
 
-    private static float inputParam(boolean secondParam) {
-        System.out.println("Enter second element: ");
-        return scanner.nextFloat();
+    public Calculator(float firstParam, float secondParam, String operation) {
+        this.firstParam = firstParam;
+        this.secondParam = secondParam;
+        this.operation = operation;
     }
 
-    private static String inputParam(String operation) {
-        System.out.println("Operation: ");
-        return scanner.next();
+    public void setFirstParam(float param) {
+        this.firstParam = param;
     }
 
-    private static void printResult(float param1, float param2, String operation) {
+    public float getFirstParam() {
+        return this.firstParam;
+    }
+
+    public void setSecondParam(float param) {
+        this.secondParam = param;
+    }
+
+    public float getSecondParam() {
+        return this.secondParam;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getOperation() {
+        return this.operation;
+    }
+
+    public float calculate() {
         float result;
 
         switch (operation) {
             case "+": {
-                result = param1 + param2;
+                result = this.firstParam + this.secondParam;
                 break;
             }
             case "-": {
-                result = param1 - param2;
+                result = this.firstParam - this.secondParam;
                 break;
             }
             case "*": {
-                result = param1 * param2;
+                result = this.firstParam * this.secondParam;
                 break;
             }
             case "/": {
-                result = param1 / param2;
+                if (this.secondParam == 0) {
+                    return Float.NaN;
+                }
+
+                result = this.firstParam / this.secondParam;
                 break;
             }
             default: {
                 System.err.println("Incorrect operation");
-                System.out.println("Please, input operation again (+, -, *, /)");
+                System.out.println("Please, set correct operation (+, -, *, /)");
 
-                String newOperation = inputParam("");
-
-                printResult(param1, param2, newOperation);
-                return;
+                return Float.NaN;
             }
         }
 
-        System.out.printf("Result: %.4f\n", result);
+        return result;
     }
 
-    static private void calculate() {
-        float param1 = inputParam();
-        float param2 = inputParam(true);
+    public float calculate(float firstParam, float secondParam, String operation) {
+        float result;
 
-        String operation = inputParam("");
+        switch (operation) {
+            case "+": {
+                result = firstParam + secondParam;
+                break;
+            }
+            case "-": {
+                result = firstParam - secondParam;
+                break;
+            }
+            case "*": {
+                result = firstParam * secondParam;
+                break;
+            }
+            case "/": {
+                if (secondParam == 0) {
+                    return Float.NaN;
+                }
 
-        printResult(param1, param2, operation);
-    }
+                result = firstParam / secondParam;
+                break;
+            }
+            default: {
+                System.err.println("Incorrect operation");
+                System.out.println("Please, set correct operation (+, -, *, /)");
 
-    static private void start() {
-        scanner = new Scanner(System.in);
-    }
+                return Float.NaN;
+            }
+        }
 
-    static private void end() {
-        scanner.close();
-    }
-
-    public static void run() {
-        start();
-        calculate();
-        end();
+        return result;
     }
 }
